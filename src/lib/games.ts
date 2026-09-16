@@ -1,4 +1,4 @@
-import { eq, asc } from 'drizzle-orm';
+import { and, eq, asc } from 'drizzle-orm';
 import type { Database } from './db';
 import { games, categories, publishers } from '../../db/schema';
 import type { Game } from '../types/game';
@@ -56,17 +56,17 @@ function baseGamesQuery(db: Database) {
 }
 
 function applyGameFilters(query: ReturnType<typeof baseGamesQuery>, filters: GameFilters = {}) {
-    let filteredQuery = query;
+    const conditions = [];
 
     if (filters.publisherId !== undefined && filters.publisherId !== null) {
-        filteredQuery = filteredQuery.where(eq(games.publisherId, filters.publisherId));
+        conditions.push(eq(games.publisherId, filters.publisherId));
     }
 
     if (filters.categoryId !== undefined && filters.categoryId !== null) {
-        filteredQuery = filteredQuery.where(eq(games.categoryId, filters.categoryId));
+        conditions.push(eq(games.categoryId, filters.categoryId));
     }
 
-    return filteredQuery;
+    return conditions.length > 0 ? query.where(and(...conditions)) : query;
 }
 
 /** All games ordered by title, optionally filtered by publisher/category. */

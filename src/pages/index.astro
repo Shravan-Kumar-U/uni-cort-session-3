@@ -104,13 +104,13 @@ const games = await getAllGames(getDatabase(), {
 </Layout>
 
 <script>
-  const form = document.querySelector('[data-testid="game-filters-form"]');
-  const publisherSelect = document.querySelector('[data-testid="publisher-filter"]');
-  const categorySelect = document.querySelector('[data-testid="category-filter"]');
-  const clearFiltersLink = document.querySelector('[data-testid="clear-filters-link"]');
-  const gamesGrid = document.querySelector('[data-testid="games-grid"]');
-  const emptyState = document.querySelector('[data-testid="empty-state-container"]');
-  const cards = Array.from(document.querySelectorAll('[data-testid="game-card"]'));
+  const form = document.querySelector<HTMLFormElement>('[data-testid="game-filters-form"]');
+  const publisherSelect = document.querySelector<HTMLSelectElement>('[data-testid="publisher-filter"]');
+  const categorySelect = document.querySelector<HTMLSelectElement>('[data-testid="category-filter"]');
+  const clearFiltersLink = document.querySelector<HTMLAnchorElement>('[data-testid="clear-filters-link"]');
+  const gamesGrid = document.querySelector<HTMLElement>('[data-testid="games-grid"]');
+  const emptyState = document.querySelector<HTMLElement>('[data-testid="empty-state-container"]');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-testid="game-card"]'));
 
   const applyFilters = () => {
     const publisher = publisherSelect?.value ?? '';

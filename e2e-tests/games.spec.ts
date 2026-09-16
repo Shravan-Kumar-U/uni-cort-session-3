@@ -31,7 +31,7 @@ test.describe('Game Listing and Navigation', () => {
     await expect(page.getByTestId('category-filter')).toBeVisible();
 
     const initialCount = await page.getByTestId('game-card').count();
-    await expect(initialCount).toBeGreaterThan(0);
+    expect(initialCount).toBeGreaterThan(0);
 
     const firstCard = page.getByTestId('game-card').first();
     const matchingPublisherId = await firstCard.getAttribute('data-game-publisher-id');

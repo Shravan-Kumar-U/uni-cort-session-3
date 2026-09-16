@@ -24,6 +24,34 @@ test.describe('Game Listing and Navigation', () => {
     });
   });
 
+  test('should allow filtering the games catalog by publisher and category', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page.getByTestId('publisher-filter')).toBeVisible();
+    await expect(page.getByTestId('category-filter')).toBeVisible();
+
+    const initialCount = await page.getByTestId('game-card').count();
+    expect(initialCount).toBeGreaterThan(0);
+
+    const firstCard = page.getByTestId('game-card').first();
+    const matchingPublisherId = await firstCard.getAttribute('data-game-publisher-id');
+    expect(matchingPublisherId).toBeTruthy();
+
+    await page.getByTestId('publisher-filter').selectOption({ value: matchingPublisherId ?? '' });
+    await page.getByTestId('apply-filters-button').click();
+
+    await expect(page).toHaveURL(/\?publisher=/);
+    const filteredCards = page.getByTestId('game-card');
+    await expect(filteredCards.first()).toBeVisible();
+
+    const visibleCount = await filteredCards.count();
+    expect(visibleCount).toBeLessThanOrEqual(initialCount);
+
+    await page.getByTestId('clear-filters-link').click();
+    await expect(page).toHaveURL('/');
+    await expect(page.getByTestId('games-grid')).toBeVisible();
+  });
+
   test('should navigate to correct game details page when clicking on a game', async ({ page }) => {
     let gameId: string | null;
     let gameTitle: string | null;
